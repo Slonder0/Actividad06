@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QMainWindow
+from PySide2.QtWidgets import QMainWindow,QFileDialog,QMessageBox
 from ui_mainwindow import Ui_MainWindow
 from administradora import Administradora
 from particula import Particula
@@ -15,6 +15,28 @@ class MainWindow(QMainWindow):
         self.ui.Agregar_final.clicked.connect(self.agregar_final)
         self.ui.Agregar_Inicio.clicked.connect(self.agregar_inicio)
         self.ui.Mostrar.clicked.connect(self.ver)
+        self.ui.actionAbrir.triggered.connect(self.action_abrir_archivo)
+        self.ui.actionGuardar.triggered.connect(self.action_guardar_archivo)
+        
+        
+    @Slot()
+    def action_abrir_archivo(self):
+        ubicacion = QFileDialog.getOpenFileName(self,'Abrir Archivo','.','JSON (*.json)')[0]
+        if self.administrador.abrir(ubicacion):
+            QMessageBox.information(self,"Exito","Se abrió el archivo de" + ubicacion)
+        else:
+            QMessageBox.information(self,"Error","No se pudo abrir el archivo de " + ubicacion)
+        
+        
+    @Slot()
+    def action_guardar_archivo(self):
+        ubicacion = QFileDialog.getSaveFileName(self,'Guardar Archivo','.','JSON (*.json)')[0]
+        if self.administrador.guardar(ubicacion):
+            QMessageBox.information(self,"Exito","Se creó el archivo con exito en " + ubicacion)
+        else:
+            QMessageBox.information(self,"Error","No se pudo crear el archivo en " + ubicacion)
+            
+        
     
     @Slot()   
     def ver(self):
@@ -35,7 +57,7 @@ class MainWindow(QMainWindow):
         Blue = self.ui.Blue_spinBox.value()
         
         
-        particula1 = Particula(ID,OrigenX,OrigenY,DestinoX,DestinoY)
+        particula1 = Particula(ID,OrigenX,OrigenY,DestinoX,DestinoY,Red,Green,Blue)
         self.administrador.agregar_final(particula1)
     
     @Slot()    
@@ -49,6 +71,6 @@ class MainWindow(QMainWindow):
         Green = self.ui.Green_spinBox.value()
         Blue = self.ui.Blue_spinBox.value()
         
-        particula1 = Particula(ID,OrigenX,OrigenY,DestinoX,DestinoY)
+        particula1 = Particula(ID,OrigenX,OrigenY,DestinoX,DestinoY,Red,Green,Blue)
         self.administrador.agregar_inicio(particula1)
         

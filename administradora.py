@@ -1,4 +1,5 @@
 from particula import Particula
+import json
 
 class Administradora:
     def __init__(self):
@@ -19,5 +20,22 @@ class Administradora:
             str(particula) for particula in self.__particulas
             ) 
 
+    def guardar(self,ubiacion):
+        try:
+            with open(ubiacion,'w') as archivo:
+                lista = [particula.to_dict() for particula in self.__particulas]
+                json.dump(lista,archivo, indent = 5)
+            return
+        except:
+            return 0
+             #json.dump()
 
-
+    def abrir(self,ubicacion):
+        try:
+            with open(ubicacion,'r') as archivo:
+                lista = json.load(archivo)
+                self.__particulas = [Particula(**particula)for particula in lista]
+            return 1
+        except:
+            return 0
+        
